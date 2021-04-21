@@ -1,0 +1,21 @@
+{
+  "name": "shared-workspace",
+  "version": "1.0.0",
+  "description": "SODV1201 term project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "[ $ENVIRON == 'dev' ] && ./node_modules/.bin/nodemon -q server.js -e js,json -i 'public/*' -i 'node_modules/*' || node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/elhardoum/shared-workspace"
+  },
+  "author": "elhardoum <i@elhardoum.com>",
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "express": "^4.17.1",
+    "hbs": "^4.1.2",
+    "nodemon": "^2.0.7"
+  }
+}

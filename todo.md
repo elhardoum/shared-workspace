@@ -1,0 +1,5 @@
+- [ ] docker struct
+- [ ] node/express struct
+- [ ] db struct
+- [ ] user sign up ( coworker or owner )
+- [ ] owner properties CRUD + sort + filter
