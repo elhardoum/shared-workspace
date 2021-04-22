@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "[ $ENVIRON == 'dev' ] && ./node_modules/.bin/nodemon -q server.js -e js,json -i 'public/*' -i 'node_modules/*' || node server.js"
+    "maybe-install": "test -d node_modules || npm install",
+    "start-dev": "./node_modules/.bin/nodemon -q server.js -e js,json -i 'public/*' -i 'node_modules/*'",
+    "start": "npm run maybe-install; echo $ENVIRON |grep dev >/dev/null && npm run start-dev || node server.js"
   },
   "repository": {
     "type": "git",

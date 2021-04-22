@@ -1,2 +1,2 @@
-#!/usr/bin/env sh
-/db/init.sh & /opt/mssql/bin/sqlservr
+#!/usr/bin/env bash
+/opt/mssql/bin/sqlservr & /usr/src/app/init.sh & sleep +inf
