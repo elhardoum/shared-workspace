@@ -1,0 +1,31 @@
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+html {
+    background-color: #fbfbfb;
+    height: 100%;
+}
+
+body {
+    font: 16px/1.5 Alegreya,Roboto,Arial,Helvetica,sans-serif;
+    color: #464646;
+    word-wrap: break-word;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: Roboto,Arial,Helvetica,sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .16rem;
+}
+
+.font-roboto {
+    font-family: Roboto,Arial,Helvetica,sans-serif;
+}
+
+.font-main {
+    font-family: Alegreya,Roboto,Arial,Helvetica,sans-serif;
+}

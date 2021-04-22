@@ -1,5 +1,7 @@
-- [ ] docker struct
-- [ ] node/express struct
-- [ ] db struct
-- [ ] user sign up ( coworker or owner )
+- [x] docker struct
+- [x] node/express struct
+- [x] db struct
+- [x] user sign up (coworker or owner)
+- [ ] profile view/edit
 - [ ] owner properties CRUD + sort + filter
+- [ ] coworker properties search w/ all filters

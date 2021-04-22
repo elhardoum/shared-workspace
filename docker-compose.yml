@@ -8,6 +8,8 @@ services:
     env_file: .env
     ports:
       - 8995:8995
+    depends_on:
+      - mssql
     build:
       context: .
       dockerfile: web/Dockerfile
