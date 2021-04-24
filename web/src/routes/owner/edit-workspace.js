@@ -45,7 +45,7 @@ const apiPatch = async (req, res) =>
   if ( ! workspace )
     return res.status(404).end()
 
-  const { categoryid, title, capacity, available, term, price, smoking, remove_tenant } = req.body
+  const { categoryid, title, capacity, available, term, price, smoking, remove_tenant, listed } = req.body
 
   if ( ! ( Number(categoryid) > 0 ) )
     return res.json({ success: false, errors: [ { field: '#categoryid', error: 'Category cannot be empty.' } ] })
@@ -81,6 +81,7 @@ const apiPatch = async (req, res) =>
     available,
     term,
     price: Number(price),
+    listed: !!listed,
   }, remove_tenant ? { renterid: null } : {})
   delete update.id
 

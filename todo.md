@@ -2,7 +2,7 @@
 - [x] node/express struct
 - [x] db struct
 - [x] user sign up (coworker or owner)
-- [ ] owner properties CRUD + sort + filter
-- [ ] coworker properties search w/ all filters
-- [ ] role-based access redirects
-- [ ] profile view/edit
+- [x] owner properties CRUD + sort + filter
+- [x] coworker properties search w/ all filters
+- [x] role-based access redirects
+- [x] profile view/edit

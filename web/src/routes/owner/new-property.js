@@ -15,7 +15,7 @@ module.exports = async (req, res) =>
 
 const api = async (req, res) =>
 {
-  const { title, address, squareft, garage, publictransportation } = req.body
+  const { title, address, squareft, garage, publictransportation, listed } = req.body
       , Properties = require('./../../model/Properties')
 
   if ( ! title.trim() )
@@ -27,7 +27,7 @@ const api = async (req, res) =>
   if ( Number(squareft) <= 0 || isNaN(Number(squareft)) )
     return res.json({ success: false, errors: [ { field: '#squareft', error: 'Size invalid or not specified.' } ] })
 
-  if ( await Properties.create(res.locals.user.id, title.trim(), address.trim(), Number(squareft), !!garage, !!publictransportation) )
+  if ( await Properties.create(res.locals.user.id, title.trim(), address.trim(), Number(squareft), !!garage, !!publictransportation, !!listed) )
     return res.json({ success: true })
 
   return res.json({ success: false, errors: [{ field: null, error: 'Internal server error, please try again.' }] })

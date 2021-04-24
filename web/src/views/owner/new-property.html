@@ -32,6 +32,11 @@
                 <input id="publictransportation" type="checkbox" {{#if property.publictransportation}}checked="checked"{{/if}} />
                 <span class="ml-2">This property is reachable by public transportation.</span>
             </label>
+
+            <label class="block text-grey-darker text-sm font-bold mb-2 flex items-center">
+                <input id="listed" type="checkbox" {{#if property.listed}}checked="checked"{{/if}} />
+                <span class="ml-2">This property is listed for rentals.</span>
+            </label>
         </div>
 
         <div class="flex items-center justify-between mt-8">

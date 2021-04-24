@@ -17,6 +17,7 @@
         , squareft = document.getElementById('squareft').value.trim()
         , garage = document.getElementById('garage').checked
         , publictransportation = document.getElementById('publictransportation').checked
+        , listed = document.getElementById('listed').checked
 
     loading.classList.remove('hidden')
 
@@ -25,7 +26,7 @@
       headers: {
         'content-type': 'application/json; charset=utf-8'
       },
-      body: JSON.stringify({ title, address, squareft, garage, publictransportation })
+      body: JSON.stringify({ title, address, squareft, garage, publictransportation, listed })
     }).then(res => res.json())
       .then(data =>
       {

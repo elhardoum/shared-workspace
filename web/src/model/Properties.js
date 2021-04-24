@@ -1,26 +1,6 @@
 module.exports = new class Properties
 {
-  COLUMNS = [ 'id', 'ownerid', 'title', 'address', 'squareft', 'garage', 'publictransportation' ]
-
-  async getBy(field, value, limit=null)
-  {
-    if ( -1 == this.COLUMNS.indexOf(field) )
-      return []
-
-    const conn = await Util.dbConn()
-
-    try {
-      const sql = require('mssql'), req = new sql.Request(conn)
-      req.input('value', value)
-
-      const results = await req.query(`select ${limit ? `top ${limit} ` : ''}* from Properties where ${field} = @value`)
-      conn.close()
-
-      return results.recordset.map(this.parse)
-    } catch (err) {
-      return void console.log(`query error: ${err}`)
-    }
-  }
+  COLUMNS = [ 'id', 'ownerid', 'title', 'address', 'squareft', 'garage', 'publictransportation', 'listed' ]
 
   async query({ fields={}, limit=null, search=null, squareft_min, squareft_max, orderby='id', order='desc' })
   {
@@ -71,13 +51,14 @@ module.exports = new class Properties
 
       return results.recordset.map(this.parse)
     } catch (err) {
-      return void console.log(`query error: ${err}`)
+      return void console.log(`query error: ${err}`) || []
     }
   }
 
-  async getOneBy(...args)
+  async queryOne(args)
   {
-    return (await this.getBy(...args, 1)).shift()
+    args.limit = 1
+    return (await this.query(args)).shift()
   }
 
   parse(item)
@@ -87,7 +68,7 @@ module.exports = new class Properties
     return item
   }
 
-  async create( ownerid, title, address, squareft, garage, publictransportation )
+  async create( ownerid, title, address, squareft, garage, publictransportation, listed=true )
   {
     const conn = await Util.dbConn()
 
@@ -99,9 +80,10 @@ module.exports = new class Properties
       req.input('squareft', squareft)
       req.input('garage', garage)
       req.input('publictransportation', publictransportation)
+      req.input('listed', listed)
 
-      const status = await req.query(`insert into Properties (ownerid, title, address, squareft, garage, publictransportation)
-        values (@ownerid, @title, @address, @squareft, @garage, @publictransportation)`)
+      const status = await req.query(`insert into Properties (ownerid, title, address, squareft, garage, publictransportation, listed)
+        values (@ownerid, @title, @address, @squareft, @garage, @publictransportation, @listed)`)
       conn.close()
 
       return !! status.rowsAffected

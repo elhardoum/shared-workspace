@@ -1,0 +1,64 @@
+<div class="w-full max-w-lg m-auto px-2">
+    <div class="flex flex-wrap justify-between mb-6">
+        <h1 class="font-main normal-case tracking-normal">{{property.title}} - Property for Rent</h1>
+    </div>
+
+    <div class="border h-48 w-48 flex-none bg-cover bg-center md:bg-left rounded-t md:rounded-t-none md:rounded-l text-center overflow-hidden w-full h-64" style="background-image: url('/assets/images/property-default.jpeg')"></div>
+
+    <p class="text-gray-800 mt-4">
+        <span><strong>Address:</strong><br/>{{property.address}}</span><br/>
+        <span><strong>Property size:</strong><br/>{{property.squareft}} sqft</span><br/>
+        <span><strong>Has a parking garage:</strong><br/>{{#if property.garage}}Yes{{else}}No{{/if}}</span><br/>
+        <span><strong>Reachable by public transportation:</strong><br/>{{#if property.publictransportation}}Yes{{else}}No{{/if}}</span><br/>
+        <span><strong>Contact Landlord:</strong><br/>
+            {{property.owner_name}}<br/>
+            <a class="text-blue-dark" href="mailto:{{property.owner_email}}">{{property.owner_email}}</a><br/>
+            <a class="text-blue-dark" href="tel:{{property.owner_phone}}">{{property.owner_phone}}</a>
+        </span>
+    </p>
+
+    <h4 class="normal-csase font-normal tracking-normal mt-4 mb-2 text-grey-darker">Available Workspaces</h4>
+
+        {{#if property.listed}}
+        {{#each workspaces}}
+            <div class="max-w-2xl bg-white border-2 border-gray-300 p-5 rounded-md tracking-wide mt-4">
+                <div class="flex">
+                    <div class="border h-48 w-48 flex-none bg-cover bg-center md:bg-left rounded-t md:rounded-t-none md:rounded-l text-center overflow-hidden" style="background-image: url('/assets/images/workspace-default.jpeg')"></div>
+                    <div class="flex flex-col ml-5">
+                        <h4 class="text-xl font-semibold mb-2">{{title}}</h4>
+                        <p class="text-gray-800 mt-2">
+                            <span><strong>Category:</strong> {{categoryname}}</span><br/>
+                            <span><strong>Capacity:</strong> {{capacity}} individuals</span><br/>
+                            <span><strong>Has smoking designated areas:</strong> {{#if property.smoking}}Yes{{else}}No{{/if}}</span><br/>
+                            <span><strong>Available from:</strong> {{#if available}}{{available_pretty}}{{else}}N/A{{/if}}</span><br/>
+                            <span><strong>Lease term:</strong> <span class="capitalize">{{term}}</span></span><br/>
+                            <span><strong>Price per term:</strong> ${{price}}</span><br/>
+                            {{#if renterid}}
+                                <span class="flex items-center">
+                                    <strong>Current Tenant:</strong>
+                                    <img alt="avatar" class="ml-2 w-6 rounded-full border-2 border-gray-300" src="{{renteravatar}}" />
+                                    <span class="ml-3">{{rentername}}</span>
+                                </span>
+                            {{/if}}
+                        </p>
+                        <div class="mt-4 flex items-center">
+                            <input type="number" placeholder="Duration in {{term}}s" class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker leading-tight focus:outline-none focus:shadow-outline" />
+                            <a href="javascript:" class="ml-2 start-lease px-1 py-1 rounded table hover:text-black text-blue inline-flex items-center" title="Leave this workspace" data-id="{{id}}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="block fill-current h-4 w-4"><path d="M24 10h-10v-10h-4v10h-10v4h10v10h4v-10h10z"/></svg>
+                                <span class="ml-2 whitespace-pre">Rent space</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {{else}}
+            <p class="mt-4"><em>There are no workspaces available for rent in this property at this moment.</em></p>
+        {{/each}}
+    {{else}}
+        <p class="mt-4"><em>This property is currently not accepting new rentals.</em></p>
+    {{/if}}
+</div>
+
+{{#extend "scripts"}}
+<script type="text/javascript" src="/assets/js/my-rentals.js"></script>
+{{/extend}}

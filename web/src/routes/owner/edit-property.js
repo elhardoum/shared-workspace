@@ -31,7 +31,7 @@ const apiPatch = async (req, res) =>
   if ( ! property )
     return res.status(404).end()
 
-  const { title, address, squareft, garage, publictransportation } = req.body
+  const { title, address, squareft, garage, publictransportation, listed } = req.body
 
   if ( ! title.trim() )
     return res.json({ success: false, errors: [ { field: '#title', error: 'Title cannot be empty.' } ] })
@@ -48,6 +48,7 @@ const apiPatch = async (req, res) =>
     squareft: Number(squareft),
     garage: !!garage,
     publictransportation: !!publictransportation,
+    listed: !!listed,
   })
   delete update.id
   delete update.ownerid

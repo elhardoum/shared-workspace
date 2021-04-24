@@ -32,7 +32,8 @@ CREATE TABLE Properties (
   address VARCHAR(200) NOT NULL,
   squareft DECIMAL(10,2) NOT NULL,
   garage BIT NOT NULL,
-  publictransportation BIT NOT NULL
+  publictransportation BIT NOT NULL,
+  listed BIT NOT NULL DEFAULT 1
 );
 
 CREATE TABLE WorkspaceCategories (
@@ -50,7 +51,8 @@ CREATE TABLE Workspaces (
   available DATE,
   term VARCHAR(10) NOT NULL,
   price DECIMAL(10,2) NOT NULL,
-  renterid INT REFERENCES Users (id)
+  renterid INT REFERENCES Users (id),
+  listed BIT NOT NULL DEFAULT 1
 );
 
 insert into WorkspaceCategories (name) values

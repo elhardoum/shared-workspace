@@ -25,7 +25,7 @@ module.exports = async (req, res) =>
 
 const api = async (req, res) =>
 {
-  const { categoryid, title, capacity, available, term, price, smoking } = req.body
+  const { categoryid, title, capacity, available, term, price, smoking, listed } = req.body
 
   if ( ! ( Number(categoryid) > 0 ) )
     return res.json({ success: false, errors: [ { field: '#categoryid', error: 'Category cannot be empty.' } ] })
@@ -53,7 +53,7 @@ const api = async (req, res) =>
   if ( ! categories.find(c => c.id == Number(categoryid)) )
     return res.json({ success: false, errors: [ { field: '#categoryid', error: 'Invalid category submitted.' } ] })
 
-  if ( await Workspaces.create(Number(req.params.id), Number(categoryid), title.trim(), Number(capacity), !!smoking, available, term, Number(price)) )
+  if ( await Workspaces.create(Number(req.params.id), Number(categoryid), title.trim(), Number(capacity), !!smoking, available, term, Number(price), null, !!listed) )
     return res.json({ success: true })
 
   return res.json({ success: false, errors: [{ field: null, error: 'Internal server error, please try again.' }] })

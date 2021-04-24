@@ -11,6 +11,8 @@ module.exports = {
     admin: require('./owner/properties-admin'),
     new: require('./owner/new-property'),
     edit: require('./owner/edit-property'),
+    list: require('./properties'),
+    view: require('./property'),
   },
   workspaces: {
     admin: require('./owner/workspaces-admin'),

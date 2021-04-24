@@ -1,6 +1,6 @@
 module.exports = new class Workspaces
 {
-  COLUMNS = [ 'id', 'propertyid', 'categoryid', 'title', 'capacity', 'smoking', 'available', 'term', 'price', 'renterid' ]
+  COLUMNS = [ 'id', 'propertyid', 'categoryid', 'title', 'capacity', 'smoking', 'available', 'term', 'price', 'renterid', 'listed' ]
 
   async getBy(field, value, limit=null)
   {
@@ -18,7 +18,7 @@ module.exports = new class Workspaces
           c.name as categoryname,
           u.name as rentername, u.email as renteremail
           from Workspaces w
-        join WorkspaceCategories c on c.id = w.categoryid
+        left join WorkspaceCategories c on c.id = w.categoryid
         left join Users u on u.id = w.renterid
         where w.${field} = @value`)
       conn.close()
@@ -29,7 +29,20 @@ module.exports = new class Workspaces
     }
   }
 
-  async query({ fields={}, limit=null, search=null, orderby='id', order='desc' })
+  async query({
+    fields={},
+    limit=null,
+    search=null,
+    orderby='id',
+    order='desc',
+    available_gte, available_lte,
+    address_search,
+    capacity_min,
+    price_min, price_max,
+    sqft_min, sqft_max,
+    garage, publictransportation,
+    property_listed,
+  })
   {
     const conn = await Util.dbConn()
         , sql = require('mssql')
@@ -38,7 +51,8 @@ module.exports = new class Workspaces
     let stmt = `select ${limit ? `top ${limit} ` : ''}
       w.*,
       c.name as categoryname,
-      u.email as renteremail, u.name as rentername, u.phone as renterphone
+      u.email as renteremail, u.name as rentername, u.phone as renterphone,
+      p.title as propertytitle, p.address, p.squareft, p.garage, p.publictransportation, p.listed as propertylisted
      from Workspaces w`
       , where = ` where 1=1`
 
@@ -46,27 +60,78 @@ module.exports = new class Workspaces
       if ( -1 == this.COLUMNS.indexOf(field) )
         continue
 
-      where += ` and w.${field} = @${field}`
-      req.input(field, fields[field])
+      if ( null === fields[field] ) {
+        where += ` and w.${field} is null`
+      } else {
+        where += ` and w.${field} = @${field}`
+        req.input(field, fields[field])
+      }
     }
 
     if ( search ) {
-      where += ' and (w.title like @s1)'
-      req.input('s1', `%${search}%`)
+      where += ' and (w.title like @title_search)'
+      req.input('title_search', `%${search}%`)
     }
 
-    // if ( squareft_min ) {
-    //   where += ' and w.squareft >= @sqftmin'
-    //   req.input('sqftmin', squareft_min)
-    // }
+    if ( address_search ) {
+      where += ' and (p.address like @address_search)'
+      req.input('address_search', `%${address_search}%`)
+    }
 
-    // if ( squareft_max ) {
-    //   where += ' and w.squareft <= @sqftmax'
-    //   req.input('sqftmax', squareft_max)
-    // }
+    if ( available_gte ) {
+      where += ' and w.available >= @available_gte'
+      req.input('available_gte', available_gte)
+    }
 
-    stmt += ` join WorkspaceCategories c on c.id = w.categoryid`
-    stmt += ` left join Users u on u.id = w.renterid ${where}`
+    if ( available_lte ) {
+      where += ' and w.available <= @available_lte'
+      req.input('available_lte', available_lte)
+    }
+
+    if ( capacity_min ) {
+      where += ' and w.capacity >= @capacity_min'
+      req.input('capacity_min', capacity_min)
+    }
+
+    if ( price_min ) {
+      where += ' and w.price >= @price_min'
+      req.input('price_min', price_min)
+    }
+
+    if ( price_max ) {
+      where += ' and w.price <= @price_max'
+      req.input('price_max', price_max)
+    }
+
+    if ( sqft_min ) {
+      where += ' and p.squareft >= @sqft_min'
+      req.input('sqft_min', sqft_min)
+    }
+
+    if ( sqft_max ) {
+      where += ' and p.squareft <= @sqft_max'
+      req.input('sqft_max', sqft_max)
+    }
+
+    if ( undefined !== garage ) {
+      where += ' and p.garage = @garage'
+      req.input('garage', !!garage)
+    }
+
+    if ( undefined !== publictransportation ) {
+      where += ' and p.publictransportation = @publictransportation'
+      req.input('publictransportation', !!publictransportation)
+    }
+
+    if ( undefined !== property_listed ) {
+      where += ' and p.listed = @property_listed'
+      req.input('property_listed', !!property_listed)
+    }
+
+    stmt += ` left join WorkspaceCategories c on c.id = w.categoryid`
+    stmt += ` left join Users u on u.id = w.renterid`
+    stmt += ` left join Properties p on p.id = w.propertyid`
+    stmt += where
 
     if ( -1 != this.COLUMNS.indexOf(orderby) ) {
       stmt += ` order by ${orderby}`
@@ -104,7 +169,7 @@ module.exports = new class Workspaces
     return item
   }
 
-  async create( propertyid, categoryid, title, capacity, smoking, available, term, price, renterid=null )
+  async create( propertyid, categoryid, title, capacity, smoking, available, term, price, renterid=null, listed=true )
   {
     const conn = await Util.dbConn()
 
@@ -119,9 +184,10 @@ module.exports = new class Workspaces
       req.input('term', term)
       req.input('price', price)
       req.input('renterid', renterid)
+      req.input('listed', listed)
 
-      const status = await req.query(`insert into Workspaces (propertyid, categoryid, title, capacity, smoking, available, term, price, renterid)
-        values (@propertyid, @categoryid, @title, @capacity, @smoking, @available, @term, @price, @renterid)`)
+      const status = await req.query(`insert into Workspaces (propertyid, categoryid, title, capacity, smoking, available, term, price, renterid, listed)
+        values (@propertyid, @categoryid, @title, @capacity, @smoking, @available, @term, @price, @renterid, @listed)`)
       conn.close()
 
       return !! status.rowsAffected

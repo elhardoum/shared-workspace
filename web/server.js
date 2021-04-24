@@ -29,8 +29,8 @@ app.use('/property-admin/edit/:id/workspaces', User.authRedirectMiddleware.bind(
 app.use('/property-admin/edit/:id/workspaces/add-new', User.authRedirectMiddleware.bind(User))
 app.use('/property-admin/edit/:id/workspaces/:wid', User.authRedirectMiddleware.bind(User))
 app.use('/my-rentals', User.authRedirectMiddleware.bind(User))
-
-// @todo add more routes
+app.use('/properties', User.authRedirectMiddleware.bind(User))
+app.use('/properties/view/:id', User.authRedirectMiddleware.bind(User))
 
 // all
 app.get('/login', routes.login)
@@ -42,8 +42,8 @@ app.get('/', routes.home)
 app.get('/profile', routes.profile.view)
 app.get('/profile/edit', routes.profile.edit)
 app.patch('/profile/edit', routes.profile.edit)
-// app.get('/properties', routes.home)
-// app.get('/properties/view/:id', routes.home)
+app.get('/properties', routes.properties.list)
+app.get('/properties/view/:id', routes.properties.view)
 
 // owner
 app.get('/property-admin', routes.properties.admin)

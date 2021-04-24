@@ -20,6 +20,7 @@
         , price = document.getElementById('price').value.trim()
         , smoking = document.getElementById('smoking').checked
         , remove_tenant = (document.getElementById('remove_tenant')||{}).checked
+        , listed = document.getElementById('listed').checked
 
     loading.classList.remove('hidden')
 
@@ -28,7 +29,7 @@
       headers: {
         'content-type': 'application/json; charset=utf-8'
       },
-      body: JSON.stringify({ categoryid, title, capacity, available, term, price, smoking, remove_tenant })
+      body: JSON.stringify({ categoryid, title, capacity, available, term, price, smoking, remove_tenant, listed })
     }).then(res => res.json())
       .then(data =>
       {
