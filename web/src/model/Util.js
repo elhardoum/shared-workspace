@@ -4,7 +4,7 @@ module.exports = new class Util
     user: 'sa',
     password: process.env.SA_PASSWORD,
     database: 'SharedWorkspace',
-    server: 'mssql',
+    server: process.env.DB_HOST,
     pool: {
       max: 10,
       min: 0,
