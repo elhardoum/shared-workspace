@@ -1,0 +1,21 @@
+<div class="w-full max-w-lg m-auto px-2">
+    <div class="flex flex-wrap justify-between mb-6">
+        <h3 class="font-normal">My Profile</h3>
+    </div>
+
+    <div class="flex items-center mb-6">
+        <img alt="avatar" class="w-24" src="{{user.avatar}}" />
+        <div class="ml-3">
+            <p><strong>{{user.name}}</strong></p>
+            <p>{{user.email}}</p>
+            <p>{{#if user.phone}}{{user.phone}}{{else}}<em class="text-sm text-grey-dark select-none">No phone number specified</em>{{/if}}</p>
+        </div>
+    </div>
+
+    <p><a href="/profile/edit" class="text-sm text-blue-dark">Edit Profile</a></p>
+    {{#ifeq user.type 'owner'}}
+    <p><a href="/property-admin" class="text-sm text-blue-dark">Manage Properties & Workspaces</a></p>
+    {{else}}
+    <p><a href="/my-rentals" class="text-sm text-blue-dark">My Rentals</a></p>
+    {{/ifeq}}
+</div>

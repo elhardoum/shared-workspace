@@ -1,0 +1,51 @@
+<div class="w-full max-w-lg m-auto px-2 mb-6">
+    <div class="flex flex-wrap justify-between">
+        <h3 class="font-normal">{{property.title}} > Workspaces</h3>
+        <a href="/property-admin/edit/{{property.id}}/workspaces/add-new" class="border border-blue hover:bg-blue-dark hover:border-transparent hover:text-white inline-block leading-none no-underline px-4 py-2 rounded text-sm text-blue">&plus; Add New</a>
+    </div>
+
+    <div>
+        {{#each items}}
+            <div class="max-w-2xl bg-white border-2 border-gray-300 p-5 rounded-md tracking-wide mt-4">
+                <div class="flex">
+                    <a href="/properties/view/{{propertyid}}" class="border h-48 w-48 flex-none bg-cover bg-center md:bg-left rounded-t md:rounded-t-none md:rounded-l text-center overflow-hidden" style="background-image: url('/assets/images/property-default.jpeg')"></a>
+                    <div class="flex flex-col ml-5">
+                        <h4 class="text-xl font-semibold mb-2">
+                            <a href="/properties/view/{{propertyid}}" class="text-blue no-underline hover:underline">{{title}}</a>
+                        </h4>
+                        <p class="text-gray-800 mt-2">
+                            <span><strong>Category:</strong> {{categoryname}}</span><br/>
+                            <span><strong>Capacity:</strong> {{capacity}} individuals</span><br/>
+                            <span><strong>Has smoking designated areas:</strong> {{#if property.smoking}}Yes{{else}}No{{/if}}</span><br/>
+                            <span><strong>Available from:</strong> {{#if available}}{{available_pretty}}{{else}}N/A{{/if}}</span><br/>
+                            <span><strong>Lease term:</strong> <span class="capitalize">{{term}}</span></span><br/>
+                            <span><strong>Price per term:</strong> ${{price}}</span><br/>
+                            {{#if renterid}}
+                                <span class="flex items-center">
+                                    <strong>Current Tenant:</strong>
+                                    <img alt="avatar" class="ml-2 w-6 rounded-full border-2 border-gray-300" src="{{renteravatar}}" />
+                                    <span class="ml-3">{{rentername}}</span>
+                                </span>
+                            {{/if}}
+                        </p>
+                        <div class="flex mt-4 items-center flex-wrap">
+                            <a href="/property-admin/edit/{{propertyid}}/workspaces/{{id}}" class="mt-1 bg-blue-dark px-1 py-1 rounded table text-white" title="Edit Workspace">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="block fill-current h-4 w-4"><path d="M18.363 8.464l1.433 1.431-12.67 12.669-7.125 1.436 1.439-7.127 12.665-12.668 1.431 1.431-12.255 12.224-.726 3.584 3.584-.723 12.224-12.257zm-.056-8.464l-2.815 2.817 5.691 5.692 2.817-2.821-5.693-5.688zm-12.318 18.718l11.313-11.316-.705-.707-11.313 11.314.705.709z"/></svg>
+                            </a>
+
+                            <a href="javascript:" class="mt-1 pty-delete bg-red px-1 py-1 rounded table text-white ml-1" title="Delete Workspace" data-pathname="/property-admin/edit/{{propertyid}}/workspaces/{{id}}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="block fill-current h-4 w-4"><path d="M9 19c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5-17v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712zm-3 4v16h-14v-16h-2v18h18v-18h-2z"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {{else}}
+            <p class="mt-4">You don't have any workspaces added yet.</p>
+        {{/each}}
+    </div>
+</div>
+
+{{#extend "scripts"}}
+<script type="text/javascript" src="/assets/js/workspaces-admin.js"></script>
+{{/extend}}

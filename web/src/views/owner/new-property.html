@@ -1,0 +1,51 @@
+<div class="w-full max-w-lg m-auto px-2">
+    <div class="flex flex-wrap justify-between mb-6">
+        <h3 class="font-normal">{{#if property.id}}Edit{{else}}New{{/if}} Property</h3>
+    </div>
+
+    <form method="post" id="new-property-form">
+        <div class="mb-4">
+            <label class="block text-grey-darker text-sm font-bold mb-2" for="title">Property Title</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker leading-tight focus:outline-none focus:shadow-outline" id="title" type="text" value="{{#if property.title}}{{property.title}}{{/if}}" />
+            <p class="text-red text-xs italic" data-error-field="#title"></p>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-grey-darker text-sm font-bold mb-2" for="address">Property Address</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker leading-tight focus:outline-none focus:shadow-outline" id="address" type="text" value="{{#if property.address}}{{property.address}}{{/if}}" />
+            <p class="text-red text-xs italic" data-error-field="#address"></p>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-grey-darker text-sm font-bold mb-2" for="squareft">Property Size (Square Feet)</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker leading-tight focus:outline-none focus:shadow-outline" id="squareft" type="text" value="{{#if property.squareft}}{{property.squareft}}{{/if}}" />
+            <p class="text-red text-xs italic" data-error-field="#squareft"></p>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-grey-darker text-sm font-bold mb-2 flex items-center">
+                <input id="garage" type="checkbox" {{#if property.garage}}checked="checked"{{/if}} />
+                <span class="ml-2">This property has a parking garage.</span>
+            </label>
+
+            <label class="block text-grey-darker text-sm font-bold mb-2 flex items-center">
+                <input id="publictransportation" type="checkbox" {{#if property.publictransportation}}checked="checked"{{/if}} />
+                <span class="ml-2">This property is reachable by public transportation.</span>
+            </label>
+        </div>
+
+        <div class="flex items-center justify-between mt-8">
+            <button type="submit" class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                {{#if property.id}}Update{{else}}Submit{{/if}} Property
+            </button>
+            <div class="ajax-loader flex-1 hidden"><img src="/assets/images/ajax-loader.gif" class="h-6 mx-2 table" /></div>
+            <a class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href="/">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+{{#extend "scripts"}}
+<script type="text/javascript" src="/assets/js/new-property.js"></script>
+{{/extend}}

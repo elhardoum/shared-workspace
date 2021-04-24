@@ -1,10 +1,10 @@
 module.exports = (req, res) =>
 {
-  if ( 'POST' == req.method )
-    return api(req, res)
-
   if ( res.locals.logged_in )
     return res.redirect('/')
+
+  if ( 'POST' == req.method )
+    return api(req, res)
 
   Object.assign(res.locals, {
     title: 'Login',

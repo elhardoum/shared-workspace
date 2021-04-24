@@ -1,15 +1,13 @@
 module.exports = new class User
 {
-  COLUMNS = [
-    'id', 'name', 'email', 'password', 'phone', 'type', 'sessions',
-  ]
+  COLUMNS = [ 'id', 'name', 'email', 'password', 'phone', 'type', 'sessions' ]
 
   async getBy(field, value, limit=null)
   {
-    const conn = await Util.dbConn()
-
     if ( -1 == this.COLUMNS.indexOf(field) )
       return []
+
+    const conn = await Util.dbConn()
 
     try {
       const sql = require('mssql'), req = new sql.Request(conn)
@@ -34,6 +32,8 @@ module.exports = new class User
     if ( ! Array.isArray(user.sessions) )
       user.sessions = (user.sessions||'').split(',').map(x => x.trim()).filter(Boolean)
 
+    user.avatar = `https://www.gravatar.com/avatar/${require('crypto').createHash('md5').update(user.email).digest('hex')}?d=mp&s=500`
+
     return user
   }
 
@@ -51,7 +51,7 @@ module.exports = new class User
     if ( ! await this.update(user.id, { sessions: user.sessions }) )
       return false
 
-    Util.setCookie( req, res, 'uid', `${session}d${user.id}`, { signed: true } )
+    Util.setCookie( req, res, 'uid', `${session}d${user.id}`, { signed: true, expires_seconds: 86400 *7 } )
 
     return true
   }
@@ -110,11 +110,15 @@ module.exports = new class User
         if ( 'sessions' == prop.toLowerCase() && Array.isArray(update[prop]) )
           update[prop] = update[prop].filter(Boolean).join(',')
 
+        if ( 'password' == prop.toLowerCase() )
+          update[prop] = await this.hashPassword(update[prop])
+
         req.input(prop, update[prop])
         stmt += `${prop} = @${prop}, `
       }
 
       stmt = stmt.replace(/\, $/, '')
+      stmt += ` where id = ${Number(id)}`
 
       const status = await req.query(stmt)
       conn.close()
@@ -143,6 +147,14 @@ module.exports = new class User
 
     if ( user && -1 != (user.sessions||[]).indexOf(cookie.replace(/d\d+$/, '')) )
       Object.assign(res.locals, { logged_in: true, user })
+
+    return next()
+  }
+
+  async authRedirectMiddleware(req, res, next)
+  {
+    if ( ! res.locals.logged_in )
+      return res.redirect('/login')
 
     return next()
   }

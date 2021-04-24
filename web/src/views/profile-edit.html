@@ -1,0 +1,45 @@
+<div class="w-full max-w-lg m-auto px-2">
+    <div class="flex flex-wrap justify-between mb-6">
+        <h3 class="font-normal">Edit Profile</h3>
+    </div>
+
+    <form method="post" id="profile-form">
+        <div class="mb-4">
+            <label class="block text-grey-darker text-sm font-bold mb-2" for="name">Full Name</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" value="{{#if user.name}}{{user.name}}{{/if}}" />
+            <p class="text-red text-xs italic" data-error-field="#name"></p>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-grey-darker text-sm font-bold mb-2" for="email">Email Address</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" value="{{#if user.email}}{{user.email}}{{/if}}" />
+            <p class="text-red text-xs italic" data-error-field="#email"></p>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-grey-darker text-sm font-bold mb-2" for="phone">Phone Number</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker leading-tight focus:outline-none focus:shadow-outline" id="phone" type="text" value="{{#if user.phone}}{{user.phone}}{{/if}}" />
+            <p class="text-red text-xs italic" data-error-field="#phone"></p>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-grey-darker text-sm font-bold mb-2" for="password">Update Password (optional)</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="New password" />
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker leading-tight focus:outline-none focus:shadow-outline mt-1" id="password2" type="password" placeholder="Confirm new password" />
+            <p class="text-red text-xs italic" data-error-field="#password"></p>
+            <p class="text-red text-xs italic" data-error-field="#password2"></p>
+        </div>
+
+        <div class="flex items-center justify-between mt-8">
+            <button type="submit" class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Save Changes</button>
+            <div class="ajax-loader flex-1 hidden"><img src="/assets/images/ajax-loader.gif" class="h-6 mx-2 table" /></div>
+            <a class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href="/profile">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+{{#extend "scripts"}}
+<script type="text/javascript" src="/assets/js/profile.js"></script>
+{{/extend}}

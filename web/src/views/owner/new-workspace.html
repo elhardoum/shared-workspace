@@ -1,0 +1,103 @@
+<div class="w-full max-w-lg m-auto px-2">
+    <div class="flex flex-wrap justify-between mb-6">
+        <h3 class="font-normal">{{#if workspace.id}}Edit{{else}}New{{/if}} Workspace</h3>
+    </div>
+
+    <form method="post" id="new-property-form">
+        <div class="mb-4">
+            <label class="block text-grey-darker text-sm font-bold mb-2" for="categoryid">Category</label>
+            <div class="relative">
+                <select class="block appearance-none w-full border shadow text-grey-darker py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:shadow-outline" id="categoryid">
+                    <option value="">&mdash; Select Category &mdash;</option>
+                    {{#each categories}}
+                        <option value="{{id}}" {{#ifeq ../workspace.categoryid id}}selected="selected"{{/ifeq}}>{{name}}</option>
+                    {{/each}}
+                </select>
+                <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+                </div>
+            </div>
+
+            <p class="text-red text-xs italic" data-error-field="#categoryid"></p>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-grey-darker text-sm font-bold mb-2" for="title">Workspace Title</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker leading-tight focus:outline-none focus:shadow-outline" id="title" type="text" value="{{#if workspace.title}}{{workspace.title}}{{/if}}" />
+            <p class="text-red text-xs italic" data-error-field="#title"></p>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-grey-darker text-sm font-bold mb-2" for="capacity">Capacity</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker leading-tight focus:outline-none focus:shadow-outline" id="capacity" type="number" value="{{#if workspace.capacity}}{{workspace.capacity}}{{/if}}" />
+            <p class="text-xs text-grey-dark">How many individuals can this workspace seat</p>
+            <p class="text-red text-xs italic" data-error-field="#capacity"></p>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-grey-darker text-sm font-bold mb-2" for="available">Availability Date</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker leading-tight focus:outline-none focus:shadow-outline" id="available" type="date" value="{{#if workspace.available}}{{workspace.available}}{{/if}}" />
+            <p class="text-xs text-grey-dark">Choose a date this workspace will be available from</p>
+            <p class="text-red text-xs italic" data-error-field="#available"></p>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-grey-darker text-sm font-bold mb-2" for="term">Lease Term</label>
+            <div class="relative">
+                <select class="block appearance-none w-full border shadow text-grey-darker py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:shadow-outline" id="term">
+                    <option value="">&mdash; Select Term &mdash;</option>
+                    <option value="day" {{#ifeq workspace.term "day"}}selected="selected"{{/ifeq}}>Day</option>
+                    <option value="week" {{#ifeq workspace.term "week"}}selected="selected"{{/ifeq}}>Week</option>
+                    <option value="month" {{#ifeq workspace.term "month"}}selected="selected"{{/ifeq}}>Month</option>
+                </select>
+                <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+                </div>
+            </div>
+
+            <p class="text-red text-xs italic" data-error-field="#term"></p>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-grey-darker text-sm font-bold mb-2" for="price">Price</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker leading-tight focus:outline-none focus:shadow-outline" id="price" type="text" value="{{#if workspace.price}}{{workspace.price}}{{/if}}" />
+            <p class="text-xs text-grey-dark">Price per lease term</p>
+            <p class="text-red text-xs italic" data-error-field="#price"></p>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-grey-darker text-sm font-bold mb-2 flex items-center">
+                <input id="smoking" type="checkbox" {{#if workspace.smoking}}checked="checked"{{/if}} />
+                <span class="ml-2">This workspace has designated smoking areas.</span>
+            </label>
+        </div>
+
+        {{#if workspace.renterid}}
+        <div class="bg-grey-lighter mb-4 p-2 shadow-md">
+            <span class="flex items-center">
+                <strong>This space is currently occupied by:</strong>
+                <img alt="avatar" class="ml-2 w-6 rounded-full border-2 border-gray-300" src="{{workspace.renteravatar}}" />
+                <span class="ml-3">{{workspace.rentername}}</span>
+            </span>
+            <label class="block text-grey-darker text-sm font-bold flex items-center mt-2">
+                <input id="remove_tenant" type="checkbox" />
+                <span class="ml-2">Check here to remove this tenant from this workspace.</span>
+            </label>
+        </div>
+        {{/if}}
+
+        <div class="flex items-center justify-between mt-8">
+            <button type="submit" class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                {{#if workspace.id}}Update{{else}}Submit{{/if}} Workspace
+            </button>
+            <div class="ajax-loader flex-1 hidden"><img src="/assets/images/ajax-loader.gif" class="h-6 mx-2 table" /></div>
+            <a class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href=".">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+{{#extend "scripts"}}
+<script type="text/javascript" src="/assets/js/new-workspace.js"></script>
+{{/extend}}
