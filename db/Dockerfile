@@ -10,5 +10,5 @@ RUN dos2unix *
 
 RUN chmod +x /usr/src/app/init.sh
 
-USER mssql
+#USER mssql
 ENTRYPOINT /bin/bash /usr/src/app/entrypoint.sh
